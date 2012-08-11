@@ -15,5 +15,6 @@
             yui="true" highlight="true"
             lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="report/clover.xml" />
+        <log type="junit" target="report/junit.xml" logIncompleteSkipped="true"/>
     </logging>
 </phpunit>
