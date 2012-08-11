@@ -22,6 +22,10 @@ namespace Dianode\Events;
  */
 class Exception extends \Exception
 {
+    /**
+     * Returns an instance of the exception, pre-coded for when the EventManager has no AnnotationReader instance.
+     * @return \Dianode\Events\Exception
+     */
     public static function noReader()
     {
         return new self("No annotation reader has been supplied.");

@@ -36,6 +36,10 @@ class Event
         $this->propagationHalted = true;
     }
     
+    /**
+     * Whether further propagation of this event has been halted or not.
+     * @return boolean
+     */
     public function propagationHalted()
     {
         return $this->propagationHalted;

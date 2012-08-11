@@ -25,6 +25,9 @@ use Doctrine\Common\Annotations\Reader;
  */
 class EventManager
 {
+    /**
+     * Class name of the @Listener annotation.
+     */
     const ANNOTATION_LISTENER = 'Dianode\Events\Annotations\Listener';
 
     /**

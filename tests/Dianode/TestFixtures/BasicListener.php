@@ -5,11 +5,11 @@ namespace Dianode\TestFixtures;
 use Dianode\Events\Annotations as Events;
 
 /**
- * ListenerClass
+ * BasicListener
  *
  * @author Geoff Adams <geoff@dianode.net>
  */
-class ListenerClass
+class BasicListener
 {
     public $listenerOneCalled = false;
     

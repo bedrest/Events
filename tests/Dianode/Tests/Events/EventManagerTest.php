@@ -5,7 +5,8 @@ namespace Dianode\Tests\Events;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Dianode\Events\Event;
 use Dianode\Events\EventManager;
-use Dianode\TestFixtures\ListenerClass;
+use Dianode\TestFixtures\BasicListener;
+use Dianode\TestFixtures\StopPropagationListener;
 
 /**
  * EventManagerTest
@@ -54,12 +55,12 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $em->addClassListeners(new \stdClass());
     }
     
-    public function testAddClassListeners()
+    public function testAddClassListenersWithAnnotations()
     {
         $reader = new AnnotationReader();
         $em = new EventManager($reader);
         
-        $instance = new ListenerClass();
+        $instance = new BasicListener();
         
         $em->addClassListeners($instance);
         
@@ -67,12 +68,12 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $em->getListeners('eventTwo'));
     }
     
-    public function testDispatchNoListeners()
+    public function testDispatchNoListenersWithAnnotations()
     {
         $reader = new AnnotationReader();
         $em = new EventManager($reader);
         
-        $instance = new ListenerClass();
+        $instance = new BasicListener();
         
         $em->addClassListeners($instance);
         
@@ -84,10 +85,24 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testDispatchSingleClass()
     {
+        $em = new EventManager();
+        
+        $instance = new BasicListener();
+        
+        $em->addListener('eventOne', array($instance, 'listenerOne'));
+        
+        $em->dispatch('eventOne', new Event());
+        
+        $this->assertTrue($instance->listenerOneCalled);
+        $this->assertFalse($instance->listenerTwoCalled);
+    }
+    
+    public function testDispatchSingleClassWithAnnotations()
+    {
         $reader = new AnnotationReader();
         $em = new EventManager($reader);
         
-        $instance = new ListenerClass();
+        $instance = new BasicListener();
         
         $em->addClassListeners($instance);
         
@@ -95,5 +110,74 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         
         $this->assertTrue($instance->listenerOneCalled);
         $this->assertFalse($instance->listenerTwoCalled);
+    }
+    
+    public function testDispatchMultipleClasses()
+    {
+        $em = new EventManager();
+        
+        $instanceOne = new BasicListener();
+        
+        $instanceTwo = new BasicListener();
+        
+        $em->addListeners('eventOne', array(
+            array($instanceOne, 'listenerOne'),
+            array($instanceTwo, 'listenerOne')
+        ));
+        
+        $em->addListeners('eventTwo', array(
+            array($instanceOne, 'listenerTwo'),
+            array($instanceTwo, 'listenerTwo'),
+        ));
+        
+        $em->dispatch('eventOne', new Event());
+        
+        $this->assertTrue($instanceOne->listenerOneCalled);
+        $this->assertTrue($instanceTwo->listenerOneCalled);
+        
+        $this->assertFalse($instanceOne->listenerTwoCalled);
+        $this->assertFalse($instanceTwo->listenerTwoCalled);
+    }
+    
+    public function testDispatchMultipleClassesWithAnnotations()
+    {
+        $reader = new AnnotationReader();
+        $em = new EventManager($reader);
+        
+        $instanceOne = new BasicListener();
+        $em->addClassListeners($instanceOne);
+        
+        $instanceTwo = new BasicListener();
+        $em->addClassListeners($instanceTwo);
+        
+        $em->dispatch('eventOne', new Event());
+        
+        $this->assertTrue($instanceOne->listenerOneCalled);
+        $this->assertTrue($instanceTwo->listenerOneCalled);
+        
+        $this->assertFalse($instanceOne->listenerTwoCalled);
+        $this->assertFalse($instanceTwo->listenerTwoCalled);
+    }
+    
+    public function testStopPropagation()
+    {
+        $reader = new AnnotationReader();
+        $em = new EventManager($reader);
+        
+        $instanceOne = new StopPropagationListener();
+        $instanceTwo = new StopPropagationListener();
+        
+        $em->addClassListeners($instanceOne);
+        $em->addClassListeners($instanceTwo);
+        
+        $event = new Event();
+        $this->assertFalse($event->propagationHalted());
+        
+        $em->dispatch('stopPropagationEvent', $event);
+        
+        $this->assertTrue($instanceOne->listenerCalled);
+        $this->assertFalse($instanceTwo->listenerCalled);
+        
+        $this->assertTrue($event->propagationHalted());
     }
 }
