@@ -25,7 +25,7 @@ use Doctrine\Common\Annotations\Reader;
  */
 class EventManager
 {
-    const ANNOTATION_LISTENER = 'Dianode\Events\Annotation\Listener';
+    const ANNOTATION_LISTENER = 'Dianode\Events\Annotations\Listener';
 
     /**
      * Annotation reader instance.
@@ -76,8 +76,8 @@ class EventManager
             throw Exception::noReader();
         }
         
-        foreach ($this->readListenersForClass($className) as $event) {
-            $this->addListener($event['event'], array($instance, $event['method']));
+        foreach ($this->readListenersForClass($className) as $listener) {
+            $this->addListener($listener['event'], array($instance, $listener['method']));
         }
     }
     

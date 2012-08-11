@@ -20,7 +20,7 @@ namespace Dianode\Events;
  *
  * @author Geoff Adams <geoff@dianode.net>
  */
-abstract class Event
+class Event
 {
     /**
      * Whether propagation of this event has been halted by a listener.

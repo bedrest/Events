@@ -1,15 +1,20 @@
 <?php
 
+$libPath = realpath(__DIR__ . '/../library');
+$vendorPath = realpath(__DIR__ . '/../vendor');
+$testPath = realpath(__DIR__);
+
 $paths = array(
-    realpath(__DIR__ . '/../library'),
-    realpath(__DIR__ . '/../vendor'),
-    realpath(__DIR__),
+    $libPath,
+    $vendorPath,
+    $testPath,
     get_include_path()
 );
 
 set_include_path(implode(PATH_SEPARATOR, $paths));
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once $vendorPath . '/autoload.php';
+require_once $libPath . '/Dianode/Events/Annotations.php';
 
 /**
  * Taken from http://zaemis.blogspot.co.uk/2012/05/writing-minimal-psr-0-autoloader.html

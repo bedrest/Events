@@ -2,7 +2,10 @@
 
 namespace Dianode\Tests\Events;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Dianode\Events\Event;
 use Dianode\Events\EventManager;
+use Dianode\TestFixtures\ListenerClass;
 
 /**
  * EventManagerTest
@@ -49,5 +52,48 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Dianode\Events\Exception');
         
         $em->addClassListeners(new \stdClass());
+    }
+    
+    public function testAddClassListeners()
+    {
+        $reader = new AnnotationReader();
+        $em = new EventManager($reader);
+        
+        $instance = new ListenerClass();
+        
+        $em->addClassListeners($instance);
+        
+        $this->assertCount(1, $em->getListeners('eventOne'));
+        $this->assertCount(1, $em->getListeners('eventTwo'));
+    }
+    
+    public function testDispatchNoListeners()
+    {
+        $reader = new AnnotationReader();
+        $em = new EventManager($reader);
+        
+        $instance = new ListenerClass();
+        
+        $em->addClassListeners($instance);
+        
+        $em->dispatch('unboundEvent', new Event());
+        
+        $this->assertFalse($instance->listenerOneCalled);
+        $this->assertFalse($instance->listenerTwoCalled);
+    }
+    
+    public function testDispatchSingleClass()
+    {
+        $reader = new AnnotationReader();
+        $em = new EventManager($reader);
+        
+        $instance = new ListenerClass();
+        
+        $em->addClassListeners($instance);
+        
+        $em->dispatch('eventOne', new Event());
+        
+        $this->assertTrue($instance->listenerOneCalled);
+        $this->assertFalse($instance->listenerTwoCalled);
     }
 }
