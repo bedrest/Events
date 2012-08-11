@@ -1,0 +1,16 @@
+{
+    "name": "dianode/eventmanager",
+    "description": "Dianode EventManager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Geoff Adams",
+            "email": "geoff@dianode.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "doctrine/common": ">=2.1.0"
+    },
+    "minimum-stability": "stable"
+}
