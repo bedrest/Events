@@ -1,6 +1,9 @@
 {
-    "name": "dianode/eventmanager",
-    "description": "Dianode EventManager",
+    "name": "dianode/events",
+    "type": "library",
+    "description": "A simple event manager and dispatcher which supports annotations.",
+    "keywords": ["event", "events", "dispatch", "listener", "observer"],
+    "homepage": "https://github.com/dianode/Events",
     "license": "MIT",
     "authors": [
         {
