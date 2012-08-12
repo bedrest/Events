@@ -16,6 +16,7 @@
 namespace Dianode\Events;
 
 use Dianode\Events\Event;
+use Dianode\Events\Driver\Driver;
 use Doctrine\Common\Annotations\Reader;
 
 /**
@@ -25,18 +26,6 @@ use Doctrine\Common\Annotations\Reader;
  */
 class EventManager
 {
-    /**
-     * Class name of the @Listener annotation.
-     */
-    const ANNOTATION_LISTENER = 'Dianode\Events\Annotations\Listener';
-
-    /**
-     * Annotation reader instance.
-     * 
-     * @var Doctrine\Common\Annotations\Reader
-     */
-    protected $reader;
-    
     /**
      * List of event listeners.
      * 
@@ -54,15 +43,14 @@ class EventManager
     /**
      * Constructor.
      * 
-     * Takes an optional annotation reader to automate event listener binding from class annotations.
+     * Takes an optional driver to automate event listener binding from class annotations.
      * 
-     * @param Doctrine\Common\Annotations\Reader $reader
+     * @param \Dianode\Events\Driver\Driver $driver
      */
-    public function __construct(Reader $reader = null)
+    public function __construct(Driver $driver = null)
     {
-        $this->reader = $reader;
+        $this->driver = $driver;
     }
-    
     
     /**
      * Automatically maps event listeners associated with a class using the driver provided to this instance and 
@@ -75,11 +63,11 @@ class EventManager
     {
         $className = get_class($instance);
         
-        if (!$this->reader) {
-            throw Exception::noReader();
+        if (!$this->driver) {
+            throw Exception::noDriver();
         }
         
-        foreach ($this->readListenersForClass($className) as $listener) {
+        foreach ($this->driver->getListenersForClass($className) as $listener) {
             $this->addListener($listener['event'], array($instance, $listener['method']));
         }
     }
@@ -146,36 +134,5 @@ class EventManager
                 break;
             }
         }
-    }
-    
-    /**
-     * Returns an array of event listeners for a particular class.
-     * @param string $className
-     */
-    protected function readListenersForClass($className)
-    {
-        $listeners = array();
-        
-        // do some reflection to get the methods
-        $reflClass = new \ReflectionClass($className);
-        $reflMethods = $reflClass->getMethods(\ReflectionMethod::IS_PUBLIC);
-
-        // process each method's annotations
-        foreach ($reflMethods as $reflMethod) {
-            $annotations = $this->reader->getMethodAnnotations($reflMethod);
-
-            foreach ($annotations as $annotation) {
-                // get the listeners
-                if (get_class($annotation) == self::ANNOTATION_LISTENER) {
-                    $listeners[] = array(
-                        'event' => $annotation->event,
-                        'namespace' => $annotation->namespace,
-                        'method' => $reflMethod->getName()
-                    );
-                }
-            }
-        }
-        
-        return $listeners;
     }
 }

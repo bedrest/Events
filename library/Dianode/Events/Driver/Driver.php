@@ -13,22 +13,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Dianode\Events;
+namespace Dianode\Events\Driver;
 
 /**
- * Exception
- *
+ * Driver
+ * 
  * @author Geoff Adams <geoff@dianode.net>
  */
-class Exception extends \Exception
+interface Driver
 {
     /**
-     * Returns an instance of the exception, pre-coded for when the EventManager has no driver instance.
-     * @return \Dianode\Events\Exception
+     * Returns the set of listeners for a class.
+     * @param string $className
+     * @return array
      */
-    public static function noDriver()
-    {
-        return new self("No driver has been supplied.");
-    }
+    public function getListenersForClass($className);
 }
-

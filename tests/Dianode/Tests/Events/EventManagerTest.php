@@ -2,9 +2,9 @@
 
 namespace Dianode\Tests\Events;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Dianode\Events\Event;
 use Dianode\Events\EventManager;
+use Dianode\Events\Driver\AnnotationDriver;
 use Dianode\TestFixtures\BasicListener;
 use Dianode\TestFixtures\StopPropagationListener;
 
@@ -57,7 +57,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testAddClassListenersWithAnnotations()
     {
-        $reader = new AnnotationReader();
+        $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
         $instance = new BasicListener();
@@ -70,7 +70,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testDispatchNoListenersWithAnnotations()
     {
-        $reader = new AnnotationReader();
+        $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
         $instance = new BasicListener();
@@ -99,7 +99,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testDispatchSingleClassWithAnnotations()
     {
-        $reader = new AnnotationReader();
+        $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
         $instance = new BasicListener();
@@ -141,7 +141,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testDispatchMultipleClassesWithAnnotations()
     {
-        $reader = new AnnotationReader();
+        $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
         $instanceOne = new BasicListener();
@@ -161,7 +161,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     
     public function testStopPropagation()
     {
-        $reader = new AnnotationReader();
+        $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
         $instanceOne = new StopPropagationListener();
