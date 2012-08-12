@@ -23,9 +23,9 @@ namespace Dianode\Events\Driver;
 interface Driver
 {
     /**
-     * Returns the set of listeners for a class.
-     * @param string $className
+     * Returns the set of listeners for a class instance.
+     * @param object $instance
      * @return array
      */
-    public function getListenersForClass($className);
+    public function getListenersForClass($instance);
 }

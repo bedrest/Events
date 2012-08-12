@@ -61,13 +61,11 @@ class EventManager
      */
     public function addClassListeners($instance)
     {
-        $className = get_class($instance);
-        
         if (!$this->driver) {
             throw Exception::noDriver();
         }
         
-        foreach ($this->driver->getListenersForClass($className) as $listener) {
+        foreach ($this->driver->getListenersForClass($instance) as $listener) {
             $this->addListener($listener['event'], array($instance, $listener['method']));
         }
     }

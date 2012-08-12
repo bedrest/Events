@@ -54,8 +54,9 @@ class AnnotationDriver implements Driver
     /**
      * {@inheritDoc}
      */
-    public function getListenersForClass($className)
+    public function getListenersForClass($instance)
     {
+        $className = get_class($instance);
         $listeners = array();
         
         // do some reflection to get the methods
