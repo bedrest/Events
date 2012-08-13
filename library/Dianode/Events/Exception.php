@@ -23,12 +23,48 @@ namespace Dianode\Events;
 class Exception extends \Exception
 {
     /**
-     * Returns an instance of the exception, pre-coded for when the EventManager has no driver instance.
+     * Exception for when the EventManager has no driver instance.
      * @return \Dianode\Events\Exception
      */
     public static function noDriver()
     {
         return new self("No driver has been supplied.");
+    }
+    
+    /**
+     * Exception for when a listener definition is invalid.
+     * @param string $className
+     * @return \Dianode\Events\Exception
+     */
+    public static function invalidListenerDefinition($className)
+    {
+        return new self("An event definition is invalid in '{$className}'.");
+    }
+    
+    /**
+     * Exception for when a listener definition is incomplete.
+     * @param string $className
+     * @return \Dianode\Events\Exception
+     */
+    public static function incompleteListenerDefinition($className, $reason = null)
+    {
+        $msg = "An event definition is incomplete or invalid in '{$className}'.";
+        
+        if ($reason) {
+            $msg .= ": $reason";
+        }
+        
+        return new self($msg);
+    }
+    
+    /**
+     * Exception for when an invalid driver is supplied.
+     * @param string $className
+     * @return \Dianode\Events\Exception
+     */
+    public static function invalidDriverSupplied($className)
+    {
+        return new self("An invalid driver was supplied: '{$className}'.");
     }
 }
 
