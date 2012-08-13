@@ -1,15 +1,15 @@
 <?php
 
-namespace Dianode\TestFixtures;
+namespace Dianode\TestFixtures\Listener;
 
 use Dianode\Events\Annotations as Events;
 
 /**
- * BasicListener
+ * AnnotationListener
  *
  * @author Geoff Adams <geoff@dianode.net>
  */
-class BasicListener
+class AnnotationListener
 {
     public $listenerOneCalled = false;
     

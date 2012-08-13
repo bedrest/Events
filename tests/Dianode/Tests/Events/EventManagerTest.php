@@ -5,8 +5,8 @@ namespace Dianode\Tests\Events;
 use Dianode\Events\Event;
 use Dianode\Events\EventManager;
 use Dianode\Events\Driver\AnnotationDriver;
-use Dianode\TestFixtures\BasicListener;
-use Dianode\TestFixtures\StopPropagationListener;
+use Dianode\TestFixtures\Listener\AnnotationListener;
+use Dianode\TestFixtures\Listener\StopPropagationListener;
 
 /**
  * EventManagerTest
@@ -15,6 +15,14 @@ use Dianode\TestFixtures\StopPropagationListener;
  */
 class EventManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testInstantiateWithInvalidDriver()
+    {
+        // constructor should not allow instantiation with a non-driver
+        $this->setExpectedException('PHPUnit_Framework_Error');
+        
+        $em = new EventManager(new stdClass());
+    }
+    
     public function testUnboundEvent()
     {
         $em = new EventManager();
@@ -60,7 +68,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
-        $instance = new BasicListener();
+        $instance = new AnnotationListener();
         
         $em->addClassListeners($instance);
         
@@ -73,7 +81,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
-        $instance = new BasicListener();
+        $instance = new AnnotationListener();
         
         $em->addClassListeners($instance);
         
@@ -87,7 +95,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $em = new EventManager();
         
-        $instance = new BasicListener();
+        $instance = new AnnotationListener();
         
         $em->addListener('eventOne', array($instance, 'listenerOne'));
         
@@ -102,7 +110,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
-        $instance = new BasicListener();
+        $instance = new AnnotationListener();
         
         $em->addClassListeners($instance);
         
@@ -116,9 +124,9 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $em = new EventManager();
         
-        $instanceOne = new BasicListener();
+        $instanceOne = new AnnotationListener();
         
-        $instanceTwo = new BasicListener();
+        $instanceTwo = new AnnotationListener();
         
         $em->addListeners('eventOne', array(
             array($instanceOne, 'listenerOne'),
@@ -144,10 +152,10 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $reader = new AnnotationDriver();
         $em = new EventManager($reader);
         
-        $instanceOne = new BasicListener();
+        $instanceOne = new AnnotationListener();
         $em->addClassListeners($instanceOne);
         
-        $instanceTwo = new BasicListener();
+        $instanceTwo = new AnnotationListener();
         $em->addClassListeners($instanceTwo);
         
         $em->dispatch('eventOne', new Event());

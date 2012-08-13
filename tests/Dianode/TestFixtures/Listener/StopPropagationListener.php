@@ -1,6 +1,6 @@
 <?php
 
-namespace Dianode\TestFixtures;
+namespace Dianode\TestFixtures\Listener;
 
 use Dianode\Events\Event;
 use Dianode\Events\Annotations as Events;
