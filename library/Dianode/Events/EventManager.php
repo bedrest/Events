@@ -74,27 +74,27 @@ class EventManager
      * Adds a listener.
      * 
      * @param string $event
-     * @param callable $observer
+     * @param callable $listener
      */
-    public function addListener($event, $observer)
+    public function addListener($event, $listener)
     {
         if (!isset($this->listeners[$event])) {
             $this->listeners[$event] = array();
         }
         
-        $this->listeners[$event][] = $observer;
+        $this->listeners[$event][] = $listener;
     }
     
     /**
      * Adds a set of listeners.
      * 
      * @param string $event
-     * @param callable $observers
+     * @param callable $listeners
      */
-    public function addListeners($event, $observers)
+    public function addListeners($event, $listeners)
     {
-        foreach ($observers as $observer) {
-            $this->addListener($event, $observer);
+        foreach ($listeners as $listener) {
+            $this->addListener($event, $listener);
         }
     }
     
@@ -125,8 +125,8 @@ class EventManager
             return;
         }
         
-        foreach ($this->listeners[$event] as $observer) {
-            call_user_func_array($observer, array($eventObject));
+        foreach ($this->listeners[$event] as $listener) {
+            call_user_func_array($listener, array($eventObject));
             
             if ($eventObject->propagationHalted()) {
                 break;
