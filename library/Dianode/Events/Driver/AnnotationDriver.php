@@ -15,6 +15,7 @@
 
 namespace Dianode\Events\Driver;
 
+use Dianode\Events\Exception;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 
@@ -70,6 +71,10 @@ class AnnotationDriver implements Driver
             foreach ($annotations as $annotation) {
                 // get the listeners
                 if (get_class($annotation) == self::ANNOTATION_LISTENER) {
+                    if (empty($annotation->event)) {
+                        throw Exception::incompleteListenerDefinition(get_class($instance), 'missing event field');
+                    }
+                    
                     $listeners[] = array(
                         'event' => $annotation->event,
                         'namespace' => $annotation->namespace,
