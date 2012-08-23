@@ -1,9 +1,9 @@
 {
-    "name": "dianode/events",
+    "name": "bedrest/events",
     "type": "library",
     "description": "A simple event manager and dispatcher which supports annotations.",
     "keywords": ["event", "events", "dispatch", "listener", "observer"],
-    "homepage": "https://github.com/dianode/Events",
+    "homepage": "https://github.com/bedrest/Events",
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
         "doctrine/common": ">=2.1.0"
     },
     "autoload": {
-        "psr-0": { "Dianode\\Events": "library/" }
+        "psr-0": { "BedRest\\Events": "library/" }
     },
     "minimum-stability": "stable"
 }

@@ -14,7 +14,7 @@ $paths = array(
 set_include_path(implode(PATH_SEPARATOR, $paths));
 
 require_once $vendorPath . '/autoload.php';
-require_once $libPath . '/Dianode/Events/Annotations.php';
+require_once $libPath . '/BedRest/Events/Annotations.php';
 
 /**
  * Taken from http://zaemis.blogspot.co.uk/2012/05/writing-minimal-psr-0-autoloader.html
